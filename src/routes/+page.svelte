@@ -3,7 +3,7 @@
 	// settings
 	const durationSetting = 0.2; // keep it nice and snappy .15 - 3 seconds
 	const panelWidth = 200;
-	$: hideInactivePanels = false; // flip to false to see what's happening outside the frame
+	$: hideInactivePanels = true; // flip to false to see what's happening outside the frame
 
 	// types
 	interface Datum {
@@ -132,8 +132,13 @@
 		transition-duration: ${duration}s;
 		transform: translateX(${slidingContainerXPosition}px);`;
 
-	// let tailwind find these classes
-	const twSafe = ["bg-yellow-600", "bg-red-600", "bg-blue-600", "bg-green-600"];
+	// lookup tailwind classes
+	const bgColorClasses: { [key: string]: string } = {
+		yellow: "bg-yellow-600",
+		red: "bg-red-600",
+		blue: "bg-blue-600",
+		green: "bg-green-600",
+	};
 
 	// variables used in template below
 	// defining here so we can add types
@@ -153,6 +158,13 @@
 		//- page title
 		h1.absolute.top-8.left-8.text-18 Svelte Simple Infinite Slider Demo
 
+		//- repository link
+		a.absolute.top-8.text-15.right-8.underline.underline-offset-4.opacity-70(
+			class="transition-opacity hover:opacity-100",
+			href!="https://github.com/kevinpeckham/svelte-simple-infinite-slider-demo",
+			title="go to repository"
+		) Github
+
 		//- outer container
 		.relative.aspect-square(
 			style!="{ outerContainerStyle }"
@@ -170,13 +182,11 @@
 					//- you would probably want to make the panels their own component and pass in the data for most use cases
 					//- but it's easier to show how it all works in a single file
 					+each('panels as panel, index')
-						+const('color = panel.color == "yellow" ? "text-primary" : "white"')
-						+const('opacity = active == panel ? "opacity-100" : "opacity-60"')
-						+const('bgColor = "bg-" + panel.color + "-600"')
-						+const('pointerEvents = active == panel ? "pointer-events-auto" : "pointer-events-none"')
+						+const('backgroundColor = bgColorClasses[panel.color]')
+						+const('inactiveClasses = active == panel ? "" : "opacity-60 pointer-events-none"')
 						+const('width = "width:" + panelWidth + "px"')
 						.panel.transition-opacity.aspect-square.flex.items-center.justify-center(
-							class!="{color} {opacity} {bgColor} {pointerEvents}",
+							class!="{backgroundColor} {inactiveClasses}",
 							bind:this!="{ panelRefs[index] }",
 							style!="{ width }"
 						) { panel.content }
