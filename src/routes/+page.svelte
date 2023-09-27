@@ -39,7 +39,9 @@
 	$: nextIndex = activeIndex + 1 < data.length ? activeIndex + 1 : 0;
 	$: next = data[nextIndex]; // e.g. 'yellow'
 
-	// an array of panels centered on the active panel -- note: needs to be manually updated when contents change
+	// an array of panels centered on the active panel
+	// note: needs to be manually updated when contents change
+	// e.g. panels = panels.slice(1);
 	$: panels = [previous, active, next];
 
 	// sliding container ref
@@ -49,18 +51,15 @@
 	let firstEl: HTMLDivElement;
 	let secondEl: HTMLDivElement;
 	let thirdEl: HTMLDivElement;
-	let fourthEl: HTMLDivElement;
 	let panelRefs: HTMLDivElement[];
-	$: panelRefs = [firstEl, secondEl, thirdEl, fourthEl];
+	$: panelRefs = [firstEl, secondEl, thirdEl];
 
 	// button refs
 	let prevButton: HTMLButtonElement;
 	let nextButton: HTMLButtonElement;
 	$: buttonRefs = [prevButton, nextButton];
 
-	// let timeout: NodeJS.Timeout;
-
-	// functions
+	// styles
 	function prevClick(event: MouseEvent) {
 		// get reference to the button itself
 		const target = event.target as HTMLButtonElement;
@@ -97,14 +96,13 @@
 		// disable the button so it isn't clicked again until the animation is complete
 		target.disabled = true;
 
-		// add the previous panel to the end of the array
-		panels = [...panels, previous];
-
 		// move the sliding container to the left
 		slidingContainerXPosition = slidingContainerXPosition - panelWidth;
 
 		// wait till the animation is complete and then:
 		setTimeout(() => {
+			panels = [...panels, previous];
+
 			// remove extra panel from end of array
 			panels = panels.slice(1);
 
@@ -145,9 +143,9 @@
 	let index: number;
 	let panel: Datum;
 	let color: string;
-	let opacity: number;
-	let pointerEvents: string;
 	let label: string;
+	let backgroundColor: string;
+	let inactiveClasses: string;
 	let lt: string;
 	let rt: string;
 </script>
@@ -170,7 +168,7 @@
 			style!="{ outerContainerStyle }"
 		)
 			//- frame
-			.outline.outline-white.relative.w-full.h-full(
+			.outline.outline-white.relative.w-full.h-full.rounded-md(
 				class!="{ hideInactivePanels ? 'overflow-hidden' : '' }"
 			)
 				//- sliding container to hold panels
