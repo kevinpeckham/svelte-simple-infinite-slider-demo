@@ -26,7 +26,7 @@
 	$: slidingContainerXPosition = panelWidth * -1;
 
 	// set active panel
-	$: active = data[1];
+	$: active = data[0];
 
 	// get index of active panel -- will update when active changes
 	$: activeIndex = data.indexOf(active);
