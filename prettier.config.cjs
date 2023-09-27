@@ -11,7 +11,6 @@ const prettierPluginPug = require("@prettier/plugin-pug");
 module.exports = {
 	plugins: [prettierPluginPug, prettierPluginSvelte],
 	overrides: [{ files: "*.svelte", options: { parser: "svelte" } }],
-
 	arrowParens: "always",
 	bracketSpacing: true,
 	htmlWhitespaceSensitivity: "strict",

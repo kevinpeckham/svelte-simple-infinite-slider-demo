@@ -4,7 +4,6 @@
 
 	// import from svelte
 	import { page } from "$app/stores";
-	import ButtonLink from "$atoms/ButtonLink.svelte";
 </script>
 
 <template lang="pug">
@@ -14,11 +13,4 @@
 			span :&nbsp;
 			span { $page.error.message }
 		.mb-24 Looks like you hit a dead end. Sorry about that.
-
-		div
-			ButtonLink(
-				targetUrl="/",
-				title="Go Home"
-			)
-				| Go Home
 </template>
